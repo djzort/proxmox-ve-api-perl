@@ -3,6 +3,7 @@ Revision history for perl Net::Proxmox::VE
 - Add github actions (no changes to package)
 - Added a perlcritic policy (no changes to package)
 - Fixed ::Exceptions.pm module and added Unit Tests
+- Renamed ENV variable for live testing to PROXMOX_USERPASS_TEST_URI
 
 0.40 2025-05-02
 - Many POD updates
