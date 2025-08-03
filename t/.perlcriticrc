@@ -1,0 +1,24 @@
+# .perlcriticrc for a Perl project with Dist::Zilla
+# Enable a subset of Perl::Critic policies for clean, modern Perl code
+
+severity = 5
+theme = core
+verbose = 6
+
+# Disable overly restrictive or opinionated policies
+[-CodeLayout::RequireTidyCode]          # Allow flexibility in code formatting
+[-Documentation::RequirePodSections]    # Dist::Zilla often handles POD
+[-Subroutines::ProhibitSubroutinePrototypes]  # Prototypes are sometimes useful
+[-Variables::ProhibitPunctuationVars]   # Allow common Perl variables like $_
+
+# Enable policies for maintainability and clarity
+[CodeLayout::ProhibitHardTabs]          # Use spaces for indentation
+[CodeLayout::RequireConsistentNewlines] # Enforce consistent line endings
+[TestingAndDebugging::RequireUseStrict] # Require 'use strict'
+[TestingAndDebugging::RequireUseWarnings] # Require 'use warnings'
+[Variables::ProhibitUnusedVariables]    # Catch unused variables
+[Subroutines::ProhibitExplicitReturnUndef] # Avoid explicit 'return undef'
+[InputOutput::RequireBracedFileHandleWithPrint] # Safer print/printf usage
+[Modules::RequireVersionVar]            # Ensure module version is defined
+[ControlStructures::ProhibitPostfixControls] # Avoid postfix if/unless/while
+[RegularExpressions::ProhibitComplexRegexes] # Keep regexes manageable
