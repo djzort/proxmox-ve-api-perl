@@ -95,8 +95,8 @@ To be used like this
 
 sub throw {
 
-    my $class = shift;
-    my $arg   = shift;
+    my ($class, $arg) = @_;
+    $class = ref $class || $class;
 
     my %args;
     if ( ref $arg ) {
@@ -109,7 +109,7 @@ sub throw {
     ( $args{package}, $args{file}, $args{line} ) = caller(0);
     $args{subroutine} = ( caller(1) )[3];
 
-    die $class->new(%args);
+    die $class->_new(%args);
 
 }
 
