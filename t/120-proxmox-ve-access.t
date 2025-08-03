@@ -3,19 +3,21 @@
 use strict;
 use warnings;
 
-use Test::More; my $tests = 5; # used later
+use Test::More import => [ qw( is_deeply note ok plan require_ok ) ];
 use Test::Trap;
-use IO::Socket::SSL qw(SSL_VERIFY_NONE);
+use IO::Socket::SSL qw( SSL_VERIFY_NONE );
 
 if ( not $ENV{PROXMOX_USERPASS_TEST_URI} ) {
-    my $msg = 'This test sucks.  Set $ENV{PROXMOX_USERPASS_TEST_URI} to a real running proxmox to run.';
+    my $msg =
+'This test sucks.  Set $ENV{PROXMOX_USERPASS_TEST_URI} to a real running proxmox to run.';
     plan( skip_all => $msg );
-} else {
-    plan tests => $tests
+}
+else {
+    plan tests => 5;
 }
 
 require_ok('Net::Proxmox::VE')
-    or die "# Net::Proxmox::VE not available\n";
+  or die "# Net::Proxmox::VE not available\n";
 
 my $obj;
 
@@ -31,9 +33,11 @@ Try something like...
 
 {
 
-   my ($user, $pass, $host, $port, $realm) =
-       $ENV{PROXMOX_USERPASS_TEST_URI} =~ m{^(\w+):(\w+)\@([\w\.]+):(\d+)/(\w+)$}
-       or die q|PROXMOX_USERPASS_TEST_URI didnt match form 'user:pass@hostname:port/realm'|."\n";
+    my ( $user, $pass, $host, $port, $realm ) =
+      $ENV{PROXMOX_USERPASS_TEST_URI} =~ m{^(\w+):(\w+)\@([\w\.]+):(\d+)/(\w+)$}
+      or die
+q|PROXMOX_USERPASS_TEST_URI didnt match form 'user:pass@hostname:port/realm'|
+      . "\n";
 
     trap {
         $obj = Net::Proxmox::VE->new(
@@ -49,7 +53,7 @@ Try something like...
 
         )
     };
-   ok (! $trap->die, 'doesnt die with good arguments');
+    ok( !$trap->die, 'doesnt die with good arguments' );
 
 }
 
@@ -59,7 +63,7 @@ After the object is created, we should be able to log in ok
 
 =cut
 
-ok($obj->login(), 'logged in to ' . $ENV{PROXMOX_USERPASS_TEST_URI});
+ok( $obj->login(), 'logged in to ' . $ENV{PROXMOX_USERPASS_TEST_URI} );
 
 =head2 user access
 
@@ -69,10 +73,18 @@ checks users access stuff
 
 {
 
-  my @index = $obj->access();
-  is_deeply(\@index,[map {{ subdir => $_ }} qw(users groups roles acl domains ticket password)], 'correct top level directories');
+    my @index = $obj->access();
+    is_deeply(
+        \@index,
+        [
+            map { { subdir => $_ } }
+              qw(users groups roles acl domains openid tfa ticket password)
+        ],
+        'correct top level directories'
+    );
+    note( 'Directories observed: ' . join(', ', map { $_->{subdir} } @index) );
 
-  @index = $obj->access_domains();
-  ok(scalar @index == 2, 'two access domains');
+    @index = $obj->access_domains();
+    ok( scalar @index == 2, 'two access domains' );
 
 }
