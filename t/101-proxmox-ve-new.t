@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use v5.10;
 
 use Test::More;
 use IO::Socket::SSL qw(SSL_VERIFY_NONE);
@@ -57,7 +58,7 @@ Try something like...
 =cut
 
 my ( $user, $pass, $host, $port, $realm ) =
-    $ENV{PROXMOX_TEST_URI} =~ m{^(\w+):(\w+)\@([\w\.]+):(\d+)/(\w+)$}
+    $ENV{PROXMOX_TEST_URI} =~ m{^(\w+):(\w+)\@([\w\.]+):([0-9]+)/(\w+)$}
 or BAIL_OUT
     q|PROXMOX_TEST_URI didnt match form 'user:pass@hostname:port/realm'|
     . "\n";
