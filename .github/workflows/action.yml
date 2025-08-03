@@ -55,7 +55,6 @@ jobs:
         run: dzil test --release
         env:
           AUTHOR_TESTING: 1
-          RELEASE_TESTING: 1
 
       - name: Build distribution
         run: dzil build
