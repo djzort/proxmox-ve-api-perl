@@ -52,7 +52,7 @@ jobs:
         run: dzil listdeps --missing | cpanm --notest
 
       - name: Run tests
-        run: pwd && ls && dzil test --automated --author
+        run: pwd && find . && dzil test --automated --author
 
       - name: Run extended tests
         run: dzil test --extended
