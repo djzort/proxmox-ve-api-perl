@@ -7,8 +7,8 @@ use Test::More; my $tests = 5; # used later
 use Test::Trap;
 use IO::Socket::SSL qw(SSL_VERIFY_NONE);
 
-if ( not $ENV{PROXMOX_TEST_URI} ) {
-    my $msg = 'This test sucks.  Set $ENV{PROXMOX_TEST_URI} to a real running proxmox to run.';
+if ( not $ENV{PROXMOX_USERPASS_TEST_URI} ) {
+    my $msg = 'This test sucks.  Set $ENV{PROXMOX_USERPASS_TEST_URI} to a real running proxmox to run.';
     plan( skip_all => $msg );
 } else {
     plan tests => $tests
@@ -21,19 +21,19 @@ my $obj;
 
 =head2 new() works with good values
 
-This relies on a $ENV{PROXMOX_TEST_URI}.
+This relies on a $ENV{PROXMOX_USERPASS_TEST_URI}.
 
 Try something like...
 
-   PROXMOX_TEST_URI="user:password@192.0.2.28:8006/pam" prove ...
+   PROXMOX_USERPASS_TEST_URI="user:password@192.0.2.28:8006/pam" prove ...
 
 =cut
 
 {
 
    my ($user, $pass, $host, $port, $realm) =
-       $ENV{PROXMOX_TEST_URI} =~ m{^(\w+):(\w+)\@([\w\.]+):(\d+)/(\w+)$}
-       or die q|PROXMOX_TEST_URI didnt match form 'user:pass@hostname:port/realm'|."\n";
+       $ENV{PROXMOX_USERPASS_TEST_URI} =~ m{^(\w+):(\w+)\@([\w\.]+):(\d+)/(\w+)$}
+       or die q|PROXMOX_USERPASS_TEST_URI didnt match form 'user:pass@hostname:port/realm'|."\n";
 
     trap {
         $obj = Net::Proxmox::VE->new(
@@ -59,7 +59,7 @@ After the object is created, we should be able to log in ok
 
 =cut
 
-ok($obj->login(), 'logged in to ' . $ENV{PROXMOX_TEST_URI});
+ok($obj->login(), 'logged in to ' . $ENV{PROXMOX_USERPASS_TEST_URI});
 
 =head2 user access
 
