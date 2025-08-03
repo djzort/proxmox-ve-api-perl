@@ -1,0 +1,61 @@
+---
+name: Test
+
+on:
+  push:
+    branches:
+      - "*"
+    tags-ignore:
+      - '*'
+  pull_request:
+    branches:
+      - "*"
+
+
+jobs:
+  perl-versions:
+    runs-on: ubuntu-latest
+    name: List Perl versions
+    outputs:
+      perl-versions: ${{ steps.action.outputs.perl-versions }}
+    steps:
+      - id: action
+        uses: perl-actions/perl-versions@v1
+        with:
+          since-perl: v5.20
+          with-devel: false
+
+  test:
+    needs: perl-versions
+    runs-on: ubuntu-latest
+    name: Perl ${{ matrix.perl-version }}
+    strategy:
+      fail-fast: false
+      matrix:
+        perl-version: ${{ fromJson(needs.perl-versions.outputs.perl-versions) }}
+    container:
+      image: perldocker/perl-tester:${{ matrix.perl-version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show Perl version
+        run: perl -V
+
+      - name: Install Dist::Zilla
+        run: cpanm --notest Dist::Zilla
+
+      - name: Install author dependencies
+        run: dzil authordeps --missing | cpanm --notest
+
+      - name: Install runtime dependencies
+        run: dzil listdeps --missing | cpanm --notest
+
+      - name: Run tests
+        run: dzil test --release
+        env:
+          AUTHOR_TESTING: 1
+          RELEASE_TESTING: 1
+
+      - name: Build distribution
+        run: dzil build
