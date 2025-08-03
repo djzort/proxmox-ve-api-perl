@@ -1,5 +1,9 @@
 Revision history for perl Net::Proxmox::VE
 
+- Add github actions (no changes to package)
+- Added a perlcritic policy (no changes to package)
+- Fixed ::Exceptions.pm module and added Unit Tests
+
 0.40 2025-05-02
 - Many POD updates
 - Cluster: Add get_cluster_nextid function
