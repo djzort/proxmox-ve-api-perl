@@ -24,7 +24,8 @@ use Net::Proxmox::VE::Storage;
 # wip
 use Net::Proxmox::VE::Nodes;
 
-my $API2_BASE_URL    = 'https://%s:%s/api2/json/';
+my $API2_BASE_URL    = 'https://%s:%s/api2/%s/';
+my $DEFAULT_FORMAT   = 'json';
 my $DEFAULT_PORT     = 8006;
 my $DEFAULT_REALM    = 'pam';
 my $DEFAULT_TIMEOUT  = 10;
@@ -68,7 +69,9 @@ for authentication. You can use just the get/delete/put/post abstraction layer o
 
 Object representations of the Proxmox VE REST API are included in seperate modules.
 
-You can use either User+Password or API Tokens for authentication.
+You can use either User+Password or API Tokens for authentication. See also L<https://pve.proxmox.com/wiki/User_Management>
+
+There is currently no support for 2FA (pull requests welcome).
 
 =head1 WARNING
 
@@ -713,7 +716,8 @@ sub url_prefix {
     # Prepare prefix for request
     my $url_prefix = sprintf( $API2_BASE_URL,
         $self->{params}->{host},
-        $self->{params}->{port} );
+        $self->{params}->{port},
+        $DEFAULT_FORMAT);
 
     return $url_prefix;
 
