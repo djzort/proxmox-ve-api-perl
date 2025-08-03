@@ -51,10 +51,17 @@ jobs:
       - name: Install runtime dependencies
         run: dzil listdeps --missing | cpanm --notest
 
-      - name: Run tests
+      - name: Run automated tests
+        run: dzil test --automated
+
+      - name: Run release tests
         run: dzil test --release
-        env:
-          AUTHOR_TESTING: 1
+
+      - name: Run extended tests
+        run: dzil test --extended
+
+      - name: Run author tests
+        run: dzil test --author
 
       - name: Build distribution
         run: dzil build
