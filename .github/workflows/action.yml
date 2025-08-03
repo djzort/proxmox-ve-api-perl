@@ -46,10 +46,10 @@ jobs:
         run: cpanm --notest Dist::Zilla
 
       - name: Install author dependencies
-        run: dzil authordeps --missing | tee | cpanm --notest
+        run: dzil authordeps --missing && dzil authordeps --missing | cpanm --notest
 
       - name: Install runtime dependencies
-        run: dzil listdeps --missing | tee | cpanm --notest
+        run: dzil listdeps --missing | cpanm --notest
 
       - name: Run tests
         run: dzil test --release
