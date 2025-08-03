@@ -51,14 +51,11 @@ jobs:
       - name: Install runtime dependencies
         run: dzil listdeps --missing | cpanm --notest
 
-      - name: Run automated tests
-        run: dzil test --automated
+      - name: Run tests
+        run: pwd && ls && dzil test --automated --author
 
       - name: Run extended tests
         run: dzil test --extended
-
-      - name: Run author tests
-        run: dzil test --author
 
       - name: Build distribution
         run: dzil build
