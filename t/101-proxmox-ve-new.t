@@ -4,17 +4,20 @@ use strict;
 use warnings;
 use v5.10;
 
-use Test::More;
-use IO::Socket::SSL qw(SSL_VERIFY_NONE);
+use Test::More import =>
+  [qw( BAIL_OUT cmp_ok note ok plan require_ok subtest )];
+use IO::Socket::SSL qw( SSL_VERIFY_NONE );
 use Test::Trap;
 
-if ( not $ENV{PROXMOX_USERPASS_TEST_URI} ) {
+if (   not $ENV{PROXMOX_USERPASS_TEST_URI}
+    or not $ENV{PROXMOX_APITOKEN_TEST_URI} )
+{
     my $msg =
-'This test sucks.  Set $ENV{PROXMOX_USERPASS_TEST_URI} to a real running proxmox to run.';
+'Set $ENV{PROXMOX_USERPASS_TEST_URI} and $ENV{PROXMOX_APITOKEN_TEST_URI} to a real running proxmox to run.';
     plan( skip_all => $msg );
 }
 else {
-    plan tests => 3;
+    plan tests => 4;
 }
 
 require_ok('Net::Proxmox::VE')
@@ -94,25 +97,63 @@ See L<METHOD TESTING SEQUENCE>
 
 subtest 'User/Password Testing' => sub {
 
-    plan tests => 16;
+    plan tests => 17;
 
     my ( $user, $pass, $host, $port, $realm ) =
-      $ENV{PROXMOX_USERPASS_TEST_URI} =~ m{^(\w+):(\w+)\@([\w\.]+):([0-9]+)/(\w+)$}
+      $ENV{PROXMOX_USERPASS_TEST_URI} =~
+      m{^(\w+):(\w+)\@([\w\.]+):([0-9]+)/(\w+)$}
       or BAIL_OUT
-      q|PROXMOX_USERPASS_TEST_URI didnt match form 'user:pass@hostname:port/realm'|
+q|PROXMOX_USERPASS_TEST_URI didnt match form 'user:pass@hostname:port/realm'|
       . "\n";
 
     test_all_the_things(
         {
             host     => $host,
             password => $pass,
-            username => $user,
             port     => $port,
             realm    => $realm,
             ssl_opts => {
                 SSL_verify_mode => SSL_VERIFY_NONE,
                 verify_hostname => 0
             },
+            username => $user,
+        }
+    );
+
+};
+
+=head1 API TOKEN TESTING
+
+Tests various actions with API Token Authentication.
+
+See L<METHOD TESTING SEQUENCE>
+
+
+=cut
+
+subtest 'API Token Testing' => sub {
+
+    plan tests => 15;
+
+    my ( $user, $tokenid, $secret, $host, $port, $realm ) =
+      $ENV{PROXMOX_APITOKEN_TEST_URI} =~
+      m{^(\w+):(\w+)=([A-z0-9\-]+)\@([\w\.]+):([0-9]+)/(\w+)$}
+      or BAIL_OUT
+q|PROXMOX_APITOKEN_TEST_URI didnt match form 'user:tokenid=secret@hostname:port/realm'|
+      . "\n";
+
+    test_all_the_things(
+        {
+            host     => $host,
+            port     => $port,
+            realm    => $realm,
+            secret   => $secret,
+            ssl_opts => {
+                SSL_verify_mode => SSL_VERIFY_NONE,
+                verify_hostname => 0
+            },
+            tokenid  => $tokenid,
+            username => $user,
         }
     );
 
@@ -156,9 +197,10 @@ Then use the helper function
 
 =cut
 
-    cmp_ok( $obj->api_version, '>=', 2,
-        'manually: check remote version is 2+' );
+    cmp_ok( $obj->api_version->{release},
+        '>=', 2, 'manually: check remote version is 2+' );
     ok( $obj->api_version_check, 'helper: check remote version is 2+' );
+    note( 'API Version Observed: ' . $obj->api_version->{release} // 'null' );
 
 =head2 check the login ticket
 
@@ -183,17 +225,22 @@ Then use the helper function
 
 =cut
 
-    my $foo = $obj->nodes;
+    my @nodes = $obj->nodes();
+    ok( scalar @nodes >= 1, 'at least one node observed' );
 
 =head2 clear login ticket
 
 checks that the login ticket clears, also checks that the login ticket is now invalid
 
+Doesn't have any effect with API Token
+
 =cut
 
-    ok( $obj->clear_login_ticket,  'clears the login ticket' );
+    ok( $obj->clear_login_ticket, 'clears the login ticket' )
+      unless $obj->{pveapitoken};    # not relevant for API Token
     ok( !$obj->clear_login_ticket, 'clearing doesnt clear any more' );
-    ok( !$obj->check_login_ticket, 'login ticket is now invalid' );
+    ok( !$obj->check_login_ticket, 'login ticket is now invalid' )
+      unless $obj->{pveapitoken};    # not relevant for API Token
 
 =head2 user access
 
