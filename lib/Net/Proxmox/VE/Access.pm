@@ -16,13 +16,28 @@ use JSON::MaybeXS qw(decode_json);
 
 our @EXPORT = qw(
   access
-  access_domains access_groups access_roles
-  create_access_domains create_access_groups create_access_roles create_access_users
-  delete_access_domains delete_access_groups delete_access_roles delete_access_users
-  get_access_domains get_access_groups get_access_roles get_access_users
-  update_access_domains update_access_groups update_access_roles update_access_users
+  access_domains
+  access_groups
+  access_roles
+  create_access_domains
+  create_access_groups
+  create_access_roles
+  create_access_users
+  delete_access_domains
+  delete_access_groups
+  delete_access_roles
+  delete_access_users
+  get_access_domains
+  get_access_groups
+  get_access_roles
+  get_access_users
+  update_access_domains
+  update_access_groups
+  update_access_roles
+  update_access_users
   sync_access_domains
-  get_access_acl update_access_acl
+  get_access_acl
+  update_access_acl
   update_access_password
 );
 

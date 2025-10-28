@@ -46,7 +46,13 @@ straight to the server API. So garbage-in, garbage-out!
 
 =cut
 
-our @EXPORT = qw( pools get_pool create_pool delete_pool update_pool );
+our @EXPORT = qw(
+  pools
+  get_pool
+  create_pool
+  delete_pool
+  update_pool
+);
 
 my $BASEPATH = '/pools';
 
