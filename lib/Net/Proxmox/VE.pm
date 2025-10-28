@@ -8,10 +8,10 @@ use warnings;
 
 package Net::Proxmox::VE;
 
-use HTTP::Headers;
-use HTTP::Request::Common qw(GET POST DELETE);
-use JSON::MaybeXS         qw(decode_json);
-use LWP::UserAgent;
+use HTTP::Headers  ();
+use HTTP::Request::Common ();
+use JSON::MaybeXS  qw(decode_json);
+use LWP::UserAgent ();
 
 use Net::Proxmox::VE::Exception;
 
