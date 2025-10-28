@@ -104,7 +104,7 @@ subtest 'Throw with hashref argument' => sub {
 
     is( $exception->message, 'Test error', 'Message is set correctly' );
     is( $exception->file,    $file,        'File is set correctly' );
-    is( $exception->line,    92,           'Line is set correctly' );
+    is( $exception->line,    94,           'Line is set correctly' );
 };
 
 done_testing();
