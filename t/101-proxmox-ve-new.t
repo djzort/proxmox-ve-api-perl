@@ -21,7 +21,7 @@ else {
 }
 
 require_ok('Net::Proxmox::VE')
-  or die "# Net::Proxmox::VE not available\n";
+  or BAIL_OUT( "# Net::Proxmox::VE not available\n" );
 
 =head1 ENVIRONMENT
 

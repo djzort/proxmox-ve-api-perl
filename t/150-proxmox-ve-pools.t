@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More; my $tests = 2; # used later
+use Test::More import => [qw( BAIL_OUT ok plan require_ok )]; my $tests = 2; # used later
 use Test::Trap;
 
 if ( not $ENV{PROXMOX_USERPASS_TEST_URI} ) {
@@ -15,7 +15,7 @@ else {
 }
 
 require_ok('Net::Proxmox::VE')
-        or die "# Net::Proxmox::VE not available\n";
+    or BAIL_OUT( "# Net::Proxmox::VE not available\n" );
 
 ok(1, 'stub!');
 

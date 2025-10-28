@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More import => [ qw( is_deeply note ok plan require_ok ) ];
+use Test::More import => [qw( BAIL_OUT is_deeply note ok plan require_ok )];
 use Test::Trap;
 use IO::Socket::SSL qw( SSL_VERIFY_NONE );
 
@@ -17,7 +17,7 @@ else {
 }
 
 require_ok('Net::Proxmox::VE')
-  or die "# Net::Proxmox::VE not available\n";
+  or BAIL_OUT( "# Net::Proxmox::VE not available\n" );
 
 my $obj;
 
