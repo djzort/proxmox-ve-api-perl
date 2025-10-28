@@ -12,8 +12,8 @@ package Net::Proxmox::VE::Exception;
 
 =head1 SYNOPSIS
 
-    use Net::Proxmox::VE::Exception;
-    Net::Proxmox::VE::Exception->throw( "What went wrong" )
+  use Net::Proxmox::VE::Exception;
+  Net::Proxmox::VE::Exception->throw( "What went wrong" )
 
 =head1 INTERNAL METHODS
 
@@ -28,12 +28,12 @@ Any argument will be included in the object.
 
 sub _new {
 
-    my $c     = shift;
-    my %args  = @_;
+    my ($c, %args) = @_;
     my $class = ref($c) || $c;
     my $self  = \%args;
 
     return bless $self, $class;
+
 }
 
 =head1 PUBLIC METHODS
@@ -42,7 +42,7 @@ sub _new {
 
 The exception details as human readable string
 
-    $obj->as_string()
+  $obj->as_string()
 
 =cut
 
@@ -55,7 +55,7 @@ sub as_string {
 
 File that called the function
 
-    $obj->file()
+  $obj->file()
 
 =cut
 
@@ -65,7 +65,7 @@ sub file { return shift->{file} }
 
 Line in the file that called the function
 
-    $obj->line()
+  $obj->line()
 
 =cut
 
@@ -75,7 +75,7 @@ sub line { return shift->{line} }
 
 Message why the exception occured
 
-    $obj->message()
+  $obj->message()
 
 =cut
 
@@ -87,9 +87,9 @@ This is intended as the public interface.
 
 To be used like this
 
-    use Net::Proxmox::VE::Exception;
-    Net::Proxmox::VE::Exception->throw( "message")
-    Net::Proxmox::VE::Exception->throw( { message => "message" } )
+  use Net::Proxmox::VE::Exception;
+  Net::Proxmox::VE::Exception->throw( "message")
+  Net::Proxmox::VE::Exception->throw( { message => "message" } )
 
 =cut
 
