@@ -1,12 +1,14 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
+
 use strict;
 use warnings;
+
 use Test::More import =>
-  [qw( done_testing is isa_ok like ok require_ok subtest )];
+  [qw( BAIL_OUT done_testing is isa_ok like ok require_ok subtest )];
 use Test::Exception;
 
 require_ok('Net::Proxmox::VE::Exception')
-  or die "# Net::Proxmox::VE::Exception not available\n";
+  or BAIL_OUT( "# Net::Proxmox::VE::Exception not available\n" );
 
 my $file = $0;
 
