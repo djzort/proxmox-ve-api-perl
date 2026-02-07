@@ -1,4 +1,5 @@
 #!/usr/bin/env perl
+# vim: softtabstop=4 tabstop=4 shiftwidth=4 ft=perl expandtab smarttab
 
 use strict;
 use warnings;
