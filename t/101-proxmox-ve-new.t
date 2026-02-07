@@ -6,8 +6,10 @@ use v5.10;
 
 use Test::More import =>
   [qw( BAIL_OUT cmp_ok note ok plan require_ok subtest )];
-use IO::Socket::SSL qw( SSL_VERIFY_NONE );
 use Test::Trap;
+
+use lib 't/lib';
+use Test::Helpers qw( $SSL_OPTS );
 
 if (   not $ENV{PROXMOX_USERPASS_TEST_URI}
     or not $ENV{PROXMOX_APITOKEN_TEST_URI} )
@@ -109,10 +111,7 @@ subtest 'User/Password Testing' => sub {
             password => $pass,
             port     => $port,
             realm    => $realm,
-            ssl_opts => {
-                SSL_verify_mode => SSL_VERIFY_NONE,
-                verify_hostname => 0
-            },
+            ssl_opts => $SSL_OPTS,
             username => $user,
         }
     );
@@ -142,10 +141,7 @@ subtest 'API Token Testing' => sub {
             port     => $port,
             realm    => $realm,
             secret   => $secret,
-            ssl_opts => {
-                SSL_verify_mode => SSL_VERIFY_NONE,
-                verify_hostname => 0
-            },
+            ssl_opts => $SSL_OPTS,
             tokenid  => $tokenid,
             username => $user,
         }
