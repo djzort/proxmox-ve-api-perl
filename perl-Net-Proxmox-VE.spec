@@ -1,5 +1,5 @@
 %define upstream_name 	 Net-Proxmox-VE
-%define upstream_version 0.40
+%define upstream_version 0.44
 
 %{?perl_default_filter}
 
@@ -11,7 +11,7 @@ Summary:    API to access ProxMox VE
 License:    MIT
 Group:      Development/Perl
 Url:        https://github.com/djzort/proxmox-ve-api-perl
-Source0:    https://github.com/djzort/proxmox-ve-api-perl/archive/v0.40.tar.gz
+Source0:    https://github.com/djzort/proxmox-ve-api-perl/archive/v0.44.tar.gz
 
 BuildArch:  noarch
 
@@ -49,6 +49,9 @@ cp -r examples $RPM_BUILD_ROOT/usr/share/doc/perl-%{upstream_name}/
 %{perl_vendorlib}/Net
 
 %changelog
+- Sun Feb 8 2026 Dean Hamstead <dean@fragfest.com.au> 0.44
+- 0.44
+
 - Sat Aug 2 2025 Dean Hamstead <dean@fragfest.com.au> 0.40
 - 0.40
 

@@ -1,5 +1,11 @@
 Revision history for perl Net::Proxmox::VE
 
+0.44 2026-02-08
+- Fix Storage.pm
+- Enhance Pools.pm
+- Improve unit tests
+- Minor changes here and there
+
 0.43 2025-09-02
 - Add totp support for user+pass logins
 
