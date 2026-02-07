@@ -372,17 +372,29 @@ sub debug {
 
 =head2 delete
 
-An action helper method that just takes a path as an argument and returns the
+An action helper method that takes a path list and delete data as an argument and returns the
 value of action() with the DELETE method
+
+ $obj->delete( @path );
+ $obj->delete( @path, \%delete_data );
 
 =cut
 
 sub delete {
     my $self = shift or return;
-    my @path = @_    or return;    # using || breaks this
+    my $delete_data;
+    $delete_data = pop
+      if ref $_[-1];
+    my @path = @_ or return; # using || breaks this
 
     if ( $self->nodes ) {
-        return $self->action( path => join( '/', @path ), method => 'DELETE' );
+
+        return $self->action(
+            path      => join( '/', @path ),
+            method    => 'DELETE',
+            post_data => $delete_data
+        );
+
     }
     return;
 }
@@ -396,7 +408,7 @@ value of action with the GET method
 
 sub _get {
     my $self      = shift;
-    my $post_data = pop @_;
+    my $post_data = pop;
     my @path      = @_;
     return $self->action(
         path      => join( '/', @path ),
@@ -410,7 +422,7 @@ sub get {
     my $post_data;
     $post_data = pop
       if ref $_[-1];
-    my @path = @_ or return;    # using || breaks this
+    my @path = @_ or return;   # using || breaks this
 
     # Calling nodes method here would call get method itself and so on
     # Commented out to avoid an infinite loop
@@ -700,7 +712,7 @@ sub new {
 
     my $debug = delete $params{debug};
     my $host  = delete $params{host}
-      || Net::Proxmox::VE::Exception->throw('host param is required');
+      or Net::Proxmox::VE::Exception->throw('host param is required');
     my $port    = delete $params{port}    || $DEFAULT_PORT;
     my $timeout = delete $params{timeout} || $DEFAULT_TIMEOUT;
 
