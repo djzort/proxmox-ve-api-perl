@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More import => [qw( BAIL_OUT ok plan require_ok )]; my $tests = 2; # used later
+use Test::More import => [qw( BAIL_OUT ok plan require_ok )]; my $tests = 4; # used later
 use Test::Trap;
 use lib 't/lib';
 use Test::Helpers qw(get_test_creds);
@@ -17,9 +17,8 @@ else {
 }
 
 require_ok('Net::Proxmox::VE')
-    or BAIL_OUT( "# Net::Proxmox::VE not available\n" );
+  or BAIL_OUT( "# Net::Proxmox::VE not available\n" );
 
-o
 my $obj;
 
 =head2 new() works with good values
@@ -60,8 +59,7 @@ checks storage stuff
 {
 
     my @index = $obj->storage();
-    ok(1, 'retrieved storage');
-    use DDP; p @index;
+    ok(scalar @index, 'retrieved storage');
 
 }
 

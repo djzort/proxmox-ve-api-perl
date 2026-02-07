@@ -46,13 +46,13 @@ straight to the server API. So garbage-in, garbage-out!
 
 =cut
 
-our @EXPORT = qw( storages );
+our @EXPORT = qw( storage );
 
-my $BASEPATH = '/storages';
+my $BASEPATH = '/storage';
 
-=head2 storages
+=head2 storage
 
-Gets a list of storages (aka the a Storage Index)
+Gets a list of storage (aka the a Storage Index)
 
   @storage = $obj->storage();
 
