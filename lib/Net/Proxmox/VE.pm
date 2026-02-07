@@ -169,15 +169,17 @@ sub action {
     my $response;
     if ( $params{method} =~ m/^(PUT|POST)$/ ) {
         $request->uri($url);
-        my $content = join '&', map { $_ . '=' . $params{post_data}->{$_} }
-          sort keys %{ $params{post_data} };
+        my $content = join( '&',
+            map { $_ . '=' . $params{post_data}->{$_} }
+            sort keys %{ $params{post_data} } );
         $request->content($content);
         $response = $ua->request($request);
     }
     if ( $params{method} =~ m/^(GET|DELETE)$/ ) {
         if ( %{ $params{post_data} } ) {
-            my $qstring = join '&', map { $_ . '=' . $params{post_data}->{$_} }
-              sort keys %{ $params{post_data} };
+            my $qstring = join( '&',
+                map { $_ . '=' . $params{post_data}->{$_} }
+                sort keys %{ $params{post_data} } );
             $request->uri("$url?$qstring");
         }
         else {
@@ -186,7 +188,6 @@ sub action {
         $response = $ua->request($request);
     }
     unless ( defined $response ) {
-
         # this shouldnt happen
         Net::Proxmox::VE::Exception->throw(
             'This shouldnt happen. Unknown method: ' . $params{method} );
@@ -275,6 +276,7 @@ Returns true if the api version is at least 2.0 (perl style true or false)
 =cut
 
 sub api_version_check {
+
     my $self = shift or return;
 
     my $data = $self->api_version;
@@ -311,8 +313,7 @@ sub check_login_ticket {
     my $is_valid =
          $ticket->{ticket}
       && $ticket->{CSRFPreventionToken}
-      && $ticket->{username} eq
-      "$self->{params}{username}\@$self->{params}{realm}"
+      && $ticket->{username} eq "$self->{params}{username}\@$self->{params}{realm}"
       && $self->{ticket_timestamp}
       && ( $self->{ticket_timestamp} + $self->{ticket_life} ) > time();
 
@@ -381,6 +382,7 @@ value of action() with the DELETE method
 =cut
 
 sub delete {
+
     my $self = shift or return;
     my $delete_data;
     $delete_data = pop
@@ -407,6 +409,7 @@ value of action with the GET method
 =cut
 
 sub _get {
+
     my $self      = shift;
     my $post_data = pop;
     my @path      = @_;
@@ -418,6 +421,7 @@ sub _get {
 }
 
 sub get {
+
     my $self = shift or return;
     my $post_data;
     $post_data = pop
@@ -640,12 +644,12 @@ sub _load_auth {
 
     if ( $params->{password} ) {
         my $password = delete $params->{password}
-          || Net::Proxmox::VE::Exception->throw('password param is required');
+          or Net::Proxmox::VE::Exception->throw('password param is required');
         $self->{'params'}->{'password'} = $password;
         $self->{'params'}->{'realm'}    = $realm;
         $self->{'params'}->{'username'} = $username;
         $self->{'params'}->{'totp'}     = delete $params->{totp}
-            if defined $params->{totp};
+          if defined $params->{totp};
         $self->{'ticket'}               = undef;
         $self->{'ticket_timestamp'}     = undef;
         $self->{'ticket_life'}          = 7200;        # 2 Hours
@@ -655,14 +659,13 @@ sub _load_auth {
     if ( $params->{tokenid} and $params->{secret} ) {
         my $tokenid = delete $params->{tokenid};
         my $secret  = delete $params->{secret};
-        $self->{'pveapitoken'} =
-          sprintf( '%s@%s!%s=%s', $username, $realm, $tokenid, $secret );
+        $self->{'pveapitoken'} = sprintf( '%s@%s!%s=%s', $username, $realm, $tokenid, $secret );
         return 1;
     }
 
     Net::Proxmox::VE::Exception->throw(
-            'Incomplete authentication credentials provided.'
-          . 'Either a password or tokenid and secret must be provided' );
+        'Incomplete authentication credentials provided.'
+        . 'Either a password or tokenid and secret must be provided' );
 
 }
 
