@@ -99,12 +99,9 @@ subtest 'User/Password Testing' => sub {
 
     plan tests => 17;
 
-    my ( $user, $pass, $host, $port, $realm ) =
-      $ENV{PROXMOX_USERPASS_TEST_URI} =~
-      m{^(\w+):(\w+)\@([\w\.]+):([0-9]+)/(\w+)$}
-      or BAIL_OUT
-q|PROXMOX_USERPASS_TEST_URI didnt match form 'user:pass@hostname:port/realm'|
-      . "\n";
+    my ( $user, $pass, $host, $port, $realm ) = $ENV{PROXMOX_USERPASS_TEST_URI} =~
+        m{^(\w+):(\w+)\@([\w\.]+):([0-9]+)/(\w+)$}
+      or BAIL_OUT "PROXMOX_USERPASS_TEST_URI didnt match form 'user:pass\@hostname:port/realm\n";
 
     test_all_the_things(
         {
@@ -135,12 +132,9 @@ subtest 'API Token Testing' => sub {
 
     plan tests => 15;
 
-    my ( $user, $tokenid, $secret, $host, $port, $realm ) =
-      $ENV{PROXMOX_APITOKEN_TEST_URI} =~
-      m{^(\w+):(\w+)=([A-z0-9\-]+)\@([\w\.]+):([0-9]+)/(\w+)$}
-      or BAIL_OUT
-q|PROXMOX_APITOKEN_TEST_URI didnt match form 'user:tokenid=secret@hostname:port/realm'|
-      . "\n";
+    my ( $user, $tokenid, $secret, $host, $port, $realm ) = $ENV{PROXMOX_APITOKEN_TEST_URI} =~
+        m{^(\w+):(\w+)=([A-z0-9\-]+)\@([\w\.]+):([0-9]+)/(\w+)$}
+      or BAIL_OUT "PROXMOX_APITOKEN_TEST_URI didnt match form 'user:tokenid=secret\@hostname:port/realm\n";
 
     test_all_the_things(
         {
@@ -197,8 +191,8 @@ Then use the helper function
 
 =cut
 
-    cmp_ok( $obj->api_version->{release},
-        '>=', 2, 'manually: check remote version is 2+' );
+    cmp_ok( $obj->api_version->{release}, '>=', 2,
+        'manually: check remote version is 2+' );
     ok( $obj->api_version_check, 'helper: check remote version is 2+' );
     note( 'API Version Observed: ' . $obj->api_version->{release} // 'null' );
 

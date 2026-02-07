@@ -3,11 +3,11 @@
 use strict;
 use warnings;
 
-use Test::More import => [ qw( BAIL_OUT ok plan require_ok ) ]; my $tests = 2; # used later
+use Test::More import => [qw( BAIL_OUT ok plan require_ok )]; my $tests = 2; # used later
 use Test::Trap;
 
-if ( not $ENV{PROXMOX_USERPASS_TEST_URI} ) {
-    my $msg = 'This test sucks.  Set $ENV{PROXMOX_USERPASS_TEST_URI} to a real running proxmox to run.';
+if ( not $ENV{PROXMOX_USERPASS_TEST_URI} and not $ENV{PROXMOX_APITOKEN_TEST_URI} ) {
+    my $msg = 'Set $ENV{PROXMOX_USERPASS_TEST_URI} or $ENV{PROXMOX_APITOKEN_TEST_URI} to a real running proxmox to run.';
     plan( skip_all => $msg );
 }
 else {

@@ -5,11 +5,11 @@ use warnings;
 
 use Test::More import => [qw( BAIL_OUT is_deeply note ok plan require_ok )];
 use Test::Trap;
-use IO::Socket::SSL qw( SSL_VERIFY_NONE );
+use lib 't/lib';
+use Test::Helpers qw(get_test_creds $SSL_OPTS);
 
-if ( not $ENV{PROXMOX_USERPASS_TEST_URI} ) {
-    my $msg =
-'This test sucks.  Set $ENV{PROXMOX_USERPASS_TEST_URI} to a real running proxmox to run.';
+if ( not $ENV{PROXMOX_USERPASS_TEST_URI} and not $ENV{PROXMOX_APITOKEN_TEST_URI} ) {
+    my $msg = 'Set $ENV{PROXMOX_USERPASS_TEST_URI} or $ENV{PROXMOX_APITOKEN_TEST_URI} to a real running proxmox to run.';
     plan( skip_all => $msg );
 }
 else {
@@ -23,7 +23,7 @@ my $obj;
 
 =head2 new() works with good values
 
-This relies on a $ENV{PROXMOX_USERPASS_TEST_URI}.
+This relies on either $ENV{PROXMOX_USERPASS_TEST_URI} or $ENV{PROXMOX_APITOKEN_TEST_URI}.
 
 Try something like...
 
@@ -33,26 +33,9 @@ Try something like...
 
 {
 
-    my ( $user, $pass, $host, $port, $realm ) =
-      $ENV{PROXMOX_USERPASS_TEST_URI} =~ m{^(\w+):(\w+)\@([\w\.]+):(\d+)/(\w+)$}
-      or die
-q|PROXMOX_USERPASS_TEST_URI didnt match form 'user:pass@hostname:port/realm'|
-      . "\n";
+    my $creds = get_test_creds();
 
-    trap {
-        $obj = Net::Proxmox::VE->new(
-            host     => $host,
-            password => $pass,
-            username => $user,
-            port     => $port,
-            realm    => $realm,
-            ssl_opts => {
-                SSL_verify_mode => SSL_VERIFY_NONE,
-                verify_hostname => 0
-            },
-
-        )
-    };
+    trap { $obj = Net::Proxmox::VE->new(%$creds) };
     ok( !$trap->die, 'doesnt die with good arguments' );
 
 }
@@ -63,7 +46,8 @@ After the object is created, we should be able to log in ok
 
 =cut
 
-ok( $obj->login(), 'logged in to ' . $ENV{PROXMOX_USERPASS_TEST_URI} );
+my $env_uri = $ENV{PROXMOX_USERPASS_TEST_URI} || $ENV{PROXMOX_APITOKEN_TEST_URI};
+ok( $obj->login(), 'logged in to ' . $env_uri );
 
 =head2 user access
 
