@@ -109,3 +109,5 @@ subtest 'Throw with hashref argument' => sub {
 };
 
 done_testing();
+
+1;

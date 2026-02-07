@@ -72,3 +72,5 @@ checks users access stuff
     ok( scalar @index == 2, 'two access domains' );
 
 }
+
+1;

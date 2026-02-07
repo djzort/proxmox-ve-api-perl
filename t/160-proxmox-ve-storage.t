@@ -19,4 +19,4 @@ require_ok('Net::Proxmox::VE')
 
 ok(1, 'stub!');
 
-1
+1;
