@@ -1,4 +1,4 @@
-#!/usr/bin/false
+#!/bin/false
 
 use strict;
 use warnings;
