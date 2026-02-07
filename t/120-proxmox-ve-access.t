@@ -6,7 +6,7 @@ use warnings;
 use Test::More import => [qw( BAIL_OUT is_deeply note ok plan require_ok )];
 use Test::Trap;
 use lib 't/lib';
-use Test::Helpers qw(get_test_creds $SSL_OPTS);
+use Test::Helpers qw(get_test_creds);
 
 if ( not $ENV{PROXMOX_USERPASS_TEST_URI} and not $ENV{PROXMOX_APITOKEN_TEST_URI} ) {
     my $msg = 'Set $ENV{PROXMOX_USERPASS_TEST_URI} or $ENV{PROXMOX_APITOKEN_TEST_URI} to a real running proxmox to run.';
