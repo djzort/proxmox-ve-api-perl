@@ -48,7 +48,7 @@ The exception details as human readable string
 
 sub as_string {
     my $self = shift;
-    sprintf '%s at %s line %s.', $self->message, $self->file, $self->line;
+    return sprintf('%s at %s line %s.', $self->message, $self->file, $self->line);
 }
 
 =head2 file
